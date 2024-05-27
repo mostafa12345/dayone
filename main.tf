@@ -44,7 +44,7 @@ resource "aws_internet_gateway" "test_gw" {
 
 #------------------- public route table ------------------------
 
-resource "aws_route_table" "public_iti" {
+resource "aws_route_table" "prt_test" {
   vpc_id = aws_vpc.test_vpc.id
  route {
     cidr_block = "0.0.0.0/0"
@@ -54,5 +54,17 @@ resource "aws_route_table" "public_iti" {
     cidr_block = var.dev_vpc1_cidr_block
     gateway_id = "local"
     }
+tags = {
+  Name = "prt_test"
+  Environment = "${var.environment}"
+ }
 }
 
+
+#------------------- Associate the route table ------------------------
+
+resource "aws_route_table_association" "aprt_test" {
+ subnet_id   = aws_subnet.public1_test.id
+ route_table_id = aws_route_table.prt_test.id
+
+}
